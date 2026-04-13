@@ -5,14 +5,31 @@ terraform {
         version = "~>4.8.0"
     }
   }
+   backend "azurerm" {
+    resource_group_name  = "tfstate-day04"
+      storage_account_name = "day0421265"
+      container_name       = "tfstate"
+      key                  = "dev.terraform.tfstate"                 # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
+  }
   required_version = ">=1.9.0"
 }
-
 provider "azurerm" {
     features {
-
     }
    resource_provider_registrations = "none"
+}
+variable "environment" {
+    type = string
+    description = "the env type"
+    default = "staging"
+      
+}
+locals {
+    common_tags = {
+        environment = "dev"
+        lob = "banking"
+        stage = "alpha"
+    }
 }
 
 resource "azurerm_resource_group" "example" {
@@ -28,6 +45,10 @@ resource "azurerm_storage_account" "example" {
   account_replication_type = "GRS"
 
   tags = {
-    environment = "staging"
+    environment = local.common_tags.stage
   }
+}
+
+output "storage_account_name" {
+    value = azurerm_storage_account.example.name
 }
