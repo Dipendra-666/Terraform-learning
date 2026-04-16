@@ -1,10 +1,3 @@
-variable "project_name" {
-    type = string
-    description = "name of the project"
-    default = "Project ALPHA Resource"
-  
-}
-
 variable "default_tags" {
     type = map(string)
     default = {
