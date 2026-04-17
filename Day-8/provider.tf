@@ -12,3 +12,7 @@ provider "azurerm" {
     }
    resource_provider_registrations = "none"
 }
+
+output "provider_version" {
+  value = azurerm.provider_version
+}
